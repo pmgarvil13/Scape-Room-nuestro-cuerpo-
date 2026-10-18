@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consola Central Bio-Bot 3000 - Edición Aula</title>
+  <style>
+    :root {
+      --bg: #0b1329;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --success: #22c55e;
+      --error: #ef4444;
+      --warning: #f59e0b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --g1-color: #38bdf8;
+      --g2-color: #4ade80;
+      --g3-color: #fb923c;
+      --g4-color: #c084fc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1220px;
+      background-color: var(--card);
+      border-radius: 24px;
+      border: 3px solid #334155;
+      padding: 20px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Pantalla 1: Narrativa introductoria */
+    #intro-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 18px;
+      padding: 20px 10px;
+    }
+
+    .intro-badge {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 6px 18px;
+      border-radius: 999px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .intro-title {
+      font-size: 2.5rem;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+      line-height: 1.2;
+    }
+
+    .intro-card {
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 18px;
+      padding: 24px 30px;
+      max-width: 900px;
+      text-align: left;
+      font-size: 1.25rem;
+      line-height: 1.65;
+      color: #e2e8f0;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
+    }
+
+    .intro-card p {
+      margin-bottom: 12px;
+    }
+
+    .intro-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .intro-highlight {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .btn-start-adventure {
+      background: var(--accent);
+      color: #0b1329;
+      border: none;
+      font-size: 1.4rem;
+      font-weight: 900;
+      padding: 16px 40px;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 8px 0 #0284c7;
+      transition: all 0.1s;
+    }
+
+    .btn-start-adventure:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 #0284c7;
+    }
+
+    /* Pantalla 2: Consola principal */
+    #main-console {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #334155;
+      padding-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .title-area h1 {
+      font-size: 1.7rem;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    .title-area p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timer-control-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #0b1329;
+      padding: 6px 14px;
+      border-radius: 14px;
+      border: 2px solid #334155;
+    }
+
+    .timer-display {
+      font-family: monospace;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--accent);
+      min-width: 90px;
+      text-align: center;
+    }
+
+    .timer-display.danger {
+      color: var(--error);
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    .t-btn {
+      background: #334155;
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .t-btn:active {
+      background: var(--accent-hover);
+    }
+
+    .t-btn.active {
+      background: var(--accent);
+      color: #0b1329;
+    }
+
+    .btn-finish {
+      background: var(--warning);
+      color: #0b1329;
+      font-weight: 800;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .tabs-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 6px;
+    }
+
+    .tab-btn {
+      background: #0b1329;
+      border: 2px solid #334155;
+      color: var(--text-muted);
+      padding: 10px 4px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.current {
+      border-color: var(--accent);
+      color: var(--accent);
+      background-color: #1e3a5f;
+    }
+
+    .challenge-panel {
+      background: #0b1329;
+      border-radius: 18px;
+      border: 2px solid #334155;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 18px;
+      min-height: 480px;
+    }
+
+    .challenge-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .challenge-info h2 {
+      font-size: 1.45rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .challenge-info p {
+      font-size: 1.05rem;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+
+    .clue-box {
+      background: #1e293b;
+      border-left: 5px solid var(--accent);
+      padding: 14px 16px;
+      border-radius: 0 12px 12px 0;
+      font-size: 1rem;
+      color: #f1f5f9;
+      line-height: 1.5;
+    }
+
+    .match-columns {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 14px;
+      margin: 10px 0;
+      background: #0f172a;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+    }
+
+    .match-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .match-col-title {
+      font-weight: bold;
+      color: var(--accent);
+      font-size: 0.95rem;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 4px;
+      margin-bottom: 2px;
+    }
+
+    .match-item {
+      background: #1e293b;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      line-height: 1.35;
+      border: 1px solid #334155;
+    }
+
+    .mission-scoreboard {
+      margin-top: 14px;
+      background: #1e293b;
+      border-radius: 14px;
+      border: 1px solid #334155;
+      padding: 12px;
+    }
+
+    .scoreboard-title {
+      font-size: 0.85rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .groups-track {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .group-status-card {
+      background: #0b1329;
+      border: 2px solid #334155;
+      border-radius: 10px;
+      padding: 8px 6px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .group-status-card.active-input {
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    }
+
+    .group-badge {
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #0b1329;
+    }
+
+    .badge-g1 { background: var(--g1-color); }
+    .badge-g2 { background: var(--g2-color); }
+    .badge-g3 { background: var(--g3-color); }
+    .badge-g4 { background: var(--g4-color); }
+
+    .lock-state {
+      font-size: 1.4rem;
+    }
+
+    .unlocked-label {
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: var(--text-muted);
+    }
+
+    .group-status-card.solved {
+      border-color: var(--success);
+      background: rgba(34, 197, 94, 0.1);
+    }
+
+    .group-status-card.solved .unlocked-label {
+      color: var(--success);
+    }
+
+    .keypad-wrapper {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 2px solid #334155;
+    }
+
+    .group-selector-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      width: 100%;
+    }
+
+    .g-select-btn {
+      border: 2px solid transparent;
+      padding: 8px 2px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: #fff;
+      background: #334155;
+      transition: all 0.15s;
+    }
+
+    .g-select-btn.g1.selected { background: var(--g1-color); color: #0b1329; border-color: #fff; }
+    .g-select-btn.g2.selected { background: var(--g2-color); color: #0b1329; border-color: #fff; }
+    .g-select-btn.g3.selected { background: var(--g3-color); color: #0b1329; border-color: #fff; }
+    .g-select-btn.g4.selected { background: var(--g4-color); color: #0b1329; border-color: #fff; }
+
+    .screen {
+      width: 100%;
+      background: #0b1329;
+      border: 2px solid #475569;
+      border-radius: 10px;
+      padding: 8px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 2.1rem;
+      letter-spacing: 5px;
+      color: #38bdf8;
+      min-height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .key-btn {
+      background: #334155;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 0;
+      font-size: 1.45rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 3px #0b1329;
+      transition: all 0.1s;
+    }
+
+    .key-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px #0b1329;
+      background: var(--accent-hover);
+    }
+
+    .key-btn.btn-del {
+      background: #64748b;
+      font-size: 1rem;
+    }
+
+    .key-btn.btn-action {
+      background: var(--accent);
+      color: #0b1329;
+      font-size: 1.1rem;
+      grid-column: span 3;
+      padding: 12px;
+      margin-top: 2px;
+    }
+
+    .status-feedback {
+      font-size: 1.05rem;
+      font-weight: bold;
+      min-height: 28px;
+      margin-top: 10px;
+    }
+
+    /* Pantalla 3: Gran ceremonia final y podio */
+    #podium-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+      padding: 20px 10px;
+    }
+
+    .podium-header h2 {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .podium-header p {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+    }
+
+    .results-table-box {
+      width: 100%;
+      max-width: 850px;
+      background: #0f172a;
+      border: 3px solid #334155;
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .group-result-row {
+      display: grid;
+      grid-template-columns: 80px 1.5fr 1fr 1fr;
+      align-items: center;
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: #1e293b;
+      border: 2px solid #334155;
+      font-size: 1.15rem;
+      font-weight: bold;
+    }
+
+    .group-result-row.winner {
+      border-color: #facc15;
+      background: rgba(250, 204, 21, 0.12);
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.25);
+    }
+
+    .award-card {
+      background: #0f172a;
+      border: 3px solid var(--success);
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 850px;
+      box-shadow: 0 0 35px rgba(34, 197, 94, 0.25);
+    }
+
+    .award-card h3 {
+      font-size: 1.8rem;
+      color: var(--success);
+      margin-bottom: 8px;
+    }
+
+    .award-card p {
+      font-size: 1.2rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 950px) {
+      .tabs-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .challenge-panel {
+        grid-template-columns: 1fr;
+      }
+      .match-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- 1. PANTALLA INTRODUCTORIA (Curiosidad y Misión Inicial) -->
+    <section id="intro-screen">
+      <div class="intro-badge">🚨 COMUNICADO URGENTE DE LA CENTRAL CIENTÍFICA</div>
+      <h1 class="intro-title">EL MISTERIO DEL BIO-BOT 3000</h1>
+      
+      <div class="intro-card">
+        <p>¡Atención, equipos de investigación de 3.º! En el laboratorio central ha ocurrido algo increíble: nuestro explorador más avanzado, el <span class="intro-highlight">Bio-Bot 3000</span>, ha sido diseñado para funcionar exactamente igual que la máquina más asombrosa del universo: <b>el cuerpo humano</b>.</p>
+        <p>Sin embargo, una extraña tormenta magnética ha desconectado sus sistemas vitales. Sus sensores no reconocen los olores ni los sonidos, sus cables nerviosos no transmiten órdenes, sus motores musculares están bloqueados y sus circuitos de nutrición se han apagado.</p>
+        <p>El robot solo podrá reactivarse si cuatro equipos científicos trabajan codo con codo resolviendo <b>8 enigmas biológicos</b>. Cada candado abierto devolverá una conexión vital. ¿Será vuestro equipo capaz de descifrar las claves antes de que se agote la energía?</p>
+      </div>
+
+      <button class="btn-start-adventure" onclick="startAdventure()">🚀 ¡ACEPTAR LA MISIÓN Y ENTRAR A LA CONSOLA!</button>
+    </section>
+
+    <!-- 2. PANTALLA DE LA CONSOLA MULTIEQUIPO -->
+    <section id="main-console">
+      <header>
+        <div class="title-area">
+          <h1>MISIÓN BIO-BOT 3000</h1>
+          <p>Consola Táctil Multiequipo | 3.º de Primaria</p>
+        </div>
+
+        <div class="header-actions">
+          <div class="timer-control-box">
+            <div class="timer-display" id="time-display">05:00</div>
+            <button class="t-btn" id="btn-t3" onclick="setTimePreset(180, this)">3 min</button>
+            <button class="t-btn active" id="btn-t5" onclick="setTimePreset(300, this)">5 min</button>
+            <button class="t-btn" id="btn-t7" onclick="setTimePreset(420, this)">7 min</button>
+            <button class="t-btn" onclick="toggleTimer()" id="btn-play">▶ Iniciar</button>
+            <button class="t-btn" onclick="resetTimer()">↺</button>
+          </div>
+          <button class="btn-finish" onclick="finishGame()">🏆 Entrega de Premios</button>
+        </div>
+      </header>
+
+      <nav class="tabs-grid">
+        <button class="tab-btn current" id="tab-1" onclick="loadMission(1)">🔒 M-1</button>
+        <button class="tab-btn" id="tab-2" onclick="loadMission(2)">🔒 M-2</button>
+        <button class="tab-btn" id="tab-3" onclick="loadMission(3)">🔒 M-3</button>
+        <button class="tab-btn" id="tab-4" onclick="loadMission(4)">🔒 M-4</button>
+        <button class="tab-btn" id="tab-5" onclick="loadMission(5)">🔒 M-5</button>
+        <button class="tab-btn" id="tab-6" onclick="loadMission(6)">🔒 M-6</button>
+        <button class="tab-btn" id="tab-7" onclick="loadMission(7)">🔒 M-7</button>
+        <button class="tab-btn" id="tab-8" onclick="loadMission(8)">🔒 M-8</button>
+      </nav>
+
+      <main class="challenge-panel">
+        <div class="challenge-info">
+          <div>
+            <h2 id="m-title">Cargando misión...</h2>
+            <p id="m-desc">...</p>
+            <div class="clue-box" id="m-clue">...</div>
+          </div>
+
+          <div class="mission-scoreboard">
+            <div class="scoreboard-title">Estado de los candados en esta misión:</div>
+            <div class="groups-track">
+              <div class="group-status-card" id="card-m-g1">
+                <span class="group-badge badge-g1">GRUPO 1</span>
+                <span class="lock-state" id="lock-icon-g1">🔒</span>
+                <span class="unlocked-label" id="lock-text-g1">Pendiente</span>
+              </div>
+              <div class="group-status-card" id="card-m-g2">
+                <span class="group-badge badge-g2">GRUPO 2</span>
+                <span class="lock-state" id="lock-icon-g2">🔒</span>
+                <span class="unlocked-label" id="lock-text-g2">Pendiente</span>
+              </div>
+              <div class="group-status-card" id="card-m-g3">
+                <span class="group-badge badge-g3">GRUPO 3</span>
+                <span class="lock-state" id="lock-icon-g3">🔒</span>
+                <span class="unlocked-label" id="lock-text-g3">Pendiente</span>
+              </div>
+              <div class="group-status-card" id="card-m-g4">
+                <span class="group-badge badge-g4">GRUPO 4</span>
+                <span class="lock-state" id="lock-icon-g4">🔒</span>
+                <span class="unlocked-label" id="lock-text-g4">Pendiente</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="status-feedback" id="m-feedback">Selecciona tu grupo y pon tu código</div>
+        </div>
+
+        <section class="keypad-wrapper">
+          <div class="group-selector-bar">
+            <button class="g-select-btn g1 selected" id="sel-g1" onclick="selectGroup(1)">Grupo 1</button>
+            <button class="g-select-btn g2" id="sel-g2" onclick="selectGroup(2)">Grupo 2</button>
+            <button class="g-select-btn g3" id="sel-g3" onclick="selectGroup(3)">Grupo 3</button>
+            <button class="g-select-btn g4" id="sel-g4" onclick="selectGroup(4)">Grupo 4</button>
+          </div>
+
+          <div class="screen" id="code-screen">---</div>
+          <div class="keypad" id="keypad-box"></div>
+        </section>
+      </main>
+    </section>
+
+    <!-- 3. PANTALLA FINAL DE ENTREGA DE PREMIOS -->
+    <section id="podium-screen">
+      <div class="podium-header">
+        <h2>🏆 CEREMONIA CIENTÍFICA: MISIÓN BIO-BOT</h2>
+        <p id="podium-subtitle">Evaluando los sistemas vitales desbloqueados por cada equipo...</p>
+      </div>
+
+      <div class="results-table-box" id="results-table">
+        <!-- Generado dinámicamente según aciertos -->
+      </div>
+
+      <div class="award-card" id="award-card-box">
+        <!-- Texto de premio generado dinámicamente -->
+      </div>
+
+      <button class="t-btn active" style="font-size: 1.15rem; padding: 12px 30px;" onclick="returnToConsole()">← Volver a la Consola</button>
+    </section>
+
+  </div>
+
+  <script>
+    const missions = {
+      1: {
+        title: "Misión 1: Receptores Sensoriales",
+        desc: "El Bio-Bot ha detectado tres estímulos en el entorno pero no reconoce los órganos receptores. Buscad qué órgano percibe cada uno y contad cuántas letras tiene su nombre escrito:",
+        clue: "1. Olor a pan recién horneado en el colegio.<br>" +
+              "2. El ruido repentino de un trueno.<br>" +
+              "3. El calor agradable de una taza de leche.<br><br>" +
+              "<b>Instrucciones:</b> Contad las letras de cada órgano en vuestra ficha y ordenad los tres dígitos resultantes de <b>MAYOR a MENOR</b>.",
+        code: "544",
+        type: "numeric"
+      },
+      2: {
+        title: "Misión 2: Circuito de Decisión Rápida",
+        desc: "Un balón vuela directo hacia vosotros en el patio. Para que el robot logre esquivarlo, ordenad la secuencia cronológica del paso 1 al 5 apoyándoos en los iconos:",
+        clue: "<b>(A)</b> 🏃 Los nervios motores llevan la orden rápida hacia las piernas.<br>" +
+              "<b>(B)</b> 👁️ La vista capta la trayectoria del balón que se acerca.<br>" +
+              "<b>(C)</b> 🦵 Los músculos de las piernas se contraen y saltáis a un lado.<br>" +
+              "<b>(D)</b> ⚡ El nervio óptico envía la información al cerebro.<br>" +
+              "<b>(E)</b> 🧠 El cerebro interpreta la imagen y decide esquivarlo.<br><br>" +
+              "<b>Clave:</b> Introducid las 5 letras en el orden temporal exacto.",
+        code: "BDEAC",
+        type: "alpha"
+      },
+      3: {
+        title: "Misión 3: El Engranaje del Aparato Locomotor",
+        desc: "Revisad el esquema del aparato locomotor  y responded a las preguntas. Contad ÚNICAMENTE cuántas vocales tiene cada palabra descubierta:",
+        clue: "• <b>1.er dígito:</b> ¿Cuántas vocales tiene la palabra que nombra las partes rígidas y duras que forman el esqueleto?<br>" +
+              "• <b>2.º dígito:</b> ¿Cuántas vocales tiene la palabra que nombra las zonas donde se unen los huesos y nos permiten doblarnos?<br>" +
+              "• <b>3.er dígito:</b> ¿Cuántas vocales tiene el nombre del músculo principal del pecho?<br><br>" +
+              "<b>Clave:</b> Escribid seguidas las tres cifras de vocales obtenidas en orden.",
+        code: "363",
+        type: "numeric"
+      },
+      4: {
+        title: "Misión 4: Dilema de Hábitos Corporales",
+        desc: "Analizad en equipo estas 6 situaciones. Marcad solo las que de verdad protegen la salud de vuestro cuerpo. Después, sumad sus puntos asignados:",
+        clue: "• [<b>10 pts</b>] Dormir entre 9 y 10 horas seguidas cada noche.<br>" +
+              "• [<b>15 pts</b>] Sentarse apoyando la espalda en el respaldo y ambos pies planos en el suelo.<br>" +
+              "• [<b>25 pts</b>] Jugar activamente, correr o hacer deporte al menos 60 minutos al día.<br>" +
+              "• [<b>12 pts</b>] Aguantar las ganas de beber agua durante el recreo para no ir al baño.<br>" +
+              "• [<b>18 pts</b>] Cenar mirando una pantalla hasta dormirse con ella encendida en la cama.<br>" +
+              "• [<b>20 pts</b>] Levantarse y estirar el cuerpo tras pasar un rato leyendo sentado.<br><br>" +
+              "<b>Clave:</b> Introducid el número total resultante de sumar los hábitos saludables.",
+        code: "70",
+        type: "numeric"
+      },
+      5: {
+        title: "Misión 5: Seguridad y Respuestas del Cuerpo",
+        desc: "Resolved las siguientes dudas para descifrar los tres dígitos de seguridad:",
+        clue: "• <b>1.er dígito:</b> Número de acciones NO reflejas (pensadas y decididas voluntariamente) encontradas en la lista de vuestra ficha de equipo.<br>" +
+              "• <b>2.º dígito:</b> Número de sílabas (golpes de voz) de la palabra que nombra el sentido utilizado para los olores.<br>" +
+              "• <b>3.er dígito:</b> Número de letras que tiene el órgano por el cual somos capaces de saber los sabores.<br><br>" +
+              "<b>Clave:</b> Introducid los 3 dígitos obtenidos en orden.",
+        code: "436",
+        type: "numeric"
+      },
+      6: {
+        title: "Misión 6: El Escudo Óseo Protector",
+        desc: "Consultad la función protectora de los huesos. Relacionad cada hueso de la Columna A con la parte u órgano vital que protege de la Columna B:",
+        clue: "<div class='match-columns'>" +
+                "<div class='match-col'>" +
+                  "<div class='match-col-title'>HUESO PROTECTOR:</div>" +
+                  "<div class='match-item'><b>[1]</b> Cráneo</div>" +
+                  "<div class='match-item'><b>[2]</b> Costillas</div>" +
+                  "<div class='match-item'><b>[3]</b> Columna vertebral</div>" +
+                "</div>" +
+                "<div class='match-col'>" +
+                  "<div class='match-col-title'>ÓRGANO PROTEGIDO:</div>" +
+                  "<div class='match-item'><b>[4]</b> Médula espinal</div>" +
+                  "<div class='match-item'><b>[5]</b> Cerebro</div>" +
+                  "<div class='match-item'><b>[6]</b> Corazón y pulmones</div>" +
+                "</div>" +
+              "</div>" +
+              "<b>Cálculo del código:</b> Emparejad en vuestra ficha cada hueso con su órgano protegido y sumad los números de cada pareja:<br>" +
+              "• 1.er dígito: [1] + el número del órgano que protege el cráneo.<br>" +
+              "• 2.º dígito: [2] + el número de los órganos que protegen las costillas.<br>" +
+              "• 3.er dígito: [3] + el número de la zona que protege la columna vertebral.<br><br>" +
+              "<b>Clave:</b> Introducid los 3 dígitos sumados en orden.",
+        code: "687",
+        type: "numeric"
+      },
+      7: {
+        title: "Misión 7: Los 4 Motores de la Nutrición",
+        desc: "Consultad el cuadro superior de la página 1. Unid cada aparato de la Columna A con su función exacta descrita en la Columna B:",
+        clue: "<div class='match-columns'>" +
+                "<div class='match-col'>" +
+                  "<div class='match-col-title'>APARATOS:</div>" +
+                  "<div class='match-item'><b>[1]</b> Aparato digestivo</div>" +
+                  "<div class='match-item'><b>[2]</b> Aparato respiratorio</div>" +
+                  "<div class='match-item'><b>[3]</b> Aparato circulatorio</div>" +
+                  "<div class='match-item'><b>[4]</b> Aparato excretor</div>" +
+                "</div>" +
+                "<div class='match-col'>" +
+                  "<div class='match-col-title'>FUNCIONES VITALES:</div>" +
+                  "<div class='match-item'><b>[5]</b> Limpia la sangre de sustancias de desecho y las elimina.</div>" +
+                  "<div class='match-item'><b>[6]</b> Obtiene oxígeno del aire y expulsa dióxido de carbono.</div>" +
+                  "<div class='match-item'><b>[7]</b> Transforma la comida en sustancias que el cuerpo pueda asimilar.</div>" +
+                  "<div class='match-item'><b>[8]</b> Transporta oxígeno y nutrientes, y recoge sustancias de desecho.</div>" +
+                "</div>" +
+              "</div>" +
+              "<b>Cálculo del código:</b> Unid cada aparato con su función y sumad los números de cada pareja:<br>" +
+              "• 1.er dígito: Suma de la pareja del <b>Aparato digestivo</b> [1 + su función].<br>" +
+              "• 2.º dígito: Suma de la pareja del <b>Aparato respiratorio</b> [2 + su función].<br>" +
+              "• 3.er dígito: Suma de la pareja del <b>Aparato circulatorio</b> [3 + su función] <i>(si da 2 cifras, anotad solo la última)</i>.<br>" +
+              "• 4.º dígito: Suma de la pareja del <b>Aparato excretor</b> [4 + su función].<br><br>" +
+              "<b>Clave:</b> Introducid los 4 dígitos obtenidos en orden.",
+        code: "8819",
+        type: "numeric"
+      },
+      8: {
+        title: "Misión 8: Cámaras de Visión y Audición",
+        desc: "Revisad con atención las partes anatómicas internas del ojo y del oído en la página 2 del documento:",
+        clue: "• <b>1.er dígito:</b> ¿Cuántas vocales tiene el nombre de la membrana sensible a la luz que recubre el interior del ojo?<br>" +
+              "• <b>2.º dígito:</b> ¿Cuántas sílabas tiene la estructura del ojo que funciona como una lupa para enfocar?<br>" +
+              "• <b>3.er dígito:</b> ¿Cuántas sílabas tiene el conducto en espiral del oído interno que contiene los receptores auditivos?<br><br>" +
+              "<b>Clave final:</b> Introducid los 3 dígitos para encender el Bio-Bot.",
+        code: "343",
+        type: "numeric"
+      }
+    };
+
+    const unlockedState = {
+      1: { 1: false, 2: false, 3: false, 4: false },
+      2: { 1: false, 2: false, 3: false, 4: false },
+      3: { 1: false, 2: false, 3: false, 4: false },
+      4: { 1: false, 2: false, 3: false, 4: false },
+      5: { 1: false, 2: false, 3: false, 4: false },
+      6: { 1: false, 2: false, 3: false, 4: false },
+      7: { 1: false, 2: false, 3: false, 4: false },
+      8: { 1: false, 2: false, 3: false, 4: false }
+    };
+
+    let activeMission = 1;
+    let currentGroup = 1;
+    let inputCode = "";
+
+    // Temporizador
+    let totalSeconds = 300;
+    let timerInterval = null;
+    let isRunning = false;
+
+    // Transición de pantallas
+    function startAdventure() {
+      playTone(587, 'triangle', 0.2);
+      document.getElementById("intro-screen").style.display = "none";
+      document.getElementById("main-console").style.display = "flex";
+      loadMission(1);
+    }
+
+    function returnToConsole() {
+      document.getElementById("podium-screen").style.display = "none";
+      document.getElementById("main-console").style.display = "flex";
+    }
+
+    function setTimePreset(secs, btn) {
+      if (isRunning) toggleTimer();
+      totalSeconds = secs;
+      document.querySelectorAll('.timer-control-box .t-btn').forEach(b => {
+        if (b.id && b.id.startsWith('btn-t')) b.classList.remove('active');
+      });
+      btn.classList.add('active');
+      updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      const disp = document.getElementById("time-display");
+      disp.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      if (totalSeconds <= 60 && totalSeconds > 0) {
+        disp.classList.add("danger");
+      } else {
+        disp.classList.remove("danger");
+      }
+    }
+
+    function toggleTimer() {
+      const btn = document.getElementById("btn-play");
+      if (!isRunning) {
+        if (totalSeconds <= 0) return;
+        isRunning = true;
+        btn.textContent = "⏸ Pausar";
+        timerInterval = setInterval(() => {
+          totalSeconds--;
+          updateTimerDisplay();
+          if (totalSeconds <= 0) {
+            clearInterval(timerInterval);
+            isRunning = false;
+            btn.textContent = "▶ Iniciar";
+            playTone(220, 'sawtooth', 0.6);
+            alert("⏰ ¡Tiempo terminado! Momento de contrastar avances con los grupos.");
+          }
+        }, 1000);
+      } else {
+        clearInterval(timerInterval);
+        isRunning = false;
+        btn.textContent = "▶ Reanudar";
+      }
+    }
+
+    function resetTimer() {
+      if (isRunning) toggleTimer();
+      const activePreset = document.querySelector('.timer-control-box .t-btn.active');
+      if (activePreset && activePreset.id === 'btn-t3') totalSeconds = 180;
+      else if (activePreset && activePreset.id === 'btn-t7') totalSeconds = 420;
+      else totalSeconds = 300;
+      updateTimerDisplay();
+    }
+
+    // Audio Web API
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playTone(freq, type, dur) {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        g.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+        osc.connect(g);
+        g.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+      } catch(e) {}
+    }
+
+    function renderKeypad(type) {
+      const box = document.getElementById("keypad-box");
+      box.innerHTML = "";
+      if (type === "numeric") {
+        for (let i = 1; i <= 9; i++) {
+          box.innerHTML += `<button class="key-btn" onclick="press('${i}')">${i}</button>`;
+        }
+        box.innerHTML += `<button class="key-btn btn-del" onclick="del()">BORRAR</button>`;
+        box.innerHTML += `<button class="key-btn" onclick="press('0')">0</button>`;
+        box.innerHTML += `<button class="key-btn btn-action" onclick="verify()">VALIDAR GRUPO ${currentGroup}</button>`;
+      } else {
+        ['A', 'B', 'C', 'D', 'E'].forEach(l => {
+          box.innerHTML += `<button class="key-btn" onclick="press('${l}')">${l}</button>`;
+        });
+        box.innerHTML += `<button class="key-btn btn-del" onclick="del()">BORRAR</button>`;
+        box.innerHTML += `<button class="key-btn btn-action" onclick="verify()">VALIDAR GRUPO ${currentGroup}</button>`;
+      }
+    }
+
+    function updateScoreboardUI() {
+      for (let g = 1; g <= 4; g++) {
+        const card = document.getElementById(`card-m-g${g}`);
+        const icon = document.getElementById(`lock-icon-g${g}`);
+        const label = document.getElementById(`lock-text-g${g}`);
+        const isSolved = unlockedState[activeMission][g];
+
+        if (isSolved) {
+          card.classList.add("solved");
+          icon.textContent = "🔓";
+          label.textContent = "¡Abierto!";
+        } else {
+          card.classList.remove("solved");
+          icon.textContent = "🔒";
+          label.textContent = "Pendiente";
+        }
+
+        if (g === currentGroup) {
+          card.classList.add("active-input");
+        } else {
+          card.classList.remove("active-input");
+        }
+      }
+
+      const allGroupsSolved = [1, 2, 3, 4].every(g => unlockedState[activeMission][g]);
+      const someGroupsSolved = [1, 2, 3, 4].some(g => unlockedState[activeMission][g]);
+      const tab = document.getElementById(`tab-${activeMission}`);
+
+      if (allGroupsSolved) {
+        tab.classList.add("unlocked");
+        tab.innerText = `🔓 M-${activeMission}`;
+      } else if (someGroupsSolved) {
+        tab.classList.add("unlocked");
+        tab.innerText = `⏳ M-${activeMission}`;
+      } else {
+        tab.classList.remove("unlocked");
+        tab.innerText = `🔒 M-${activeMission}`;
+      }
+    }
+
+    function selectGroup(g) {
+      playTone(400, 'sine', 0.05);
+      currentGroup = g;
+      inputCode = "";
+      document.getElementById("code-screen").textContent = "---";
+
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`sel-g${i}`);
+        if (i === g) btn.classList.add("selected");
+        else btn.classList.remove("selected");
+      }
+
+      const feedback = document.getElementById("m-feedback");
+      if (unlockedState[activeMission][currentGroup]) {
+        feedback.textContent = `⭐ ¡El Grupo ${currentGroup} ya ha abierto este candado!`;
+        feedback.style.color = "var(--success)";
+      } else {
+        feedback.textContent = `Turno de validación: Grupo ${currentGroup}`;
+        feedback.style.color = "var(--text)";
+      }
+
+      renderKeypad(missions[activeMission].type);
+      updateScoreboardUI();
+    }
+
+    function loadMission(id) {
+      activeMission = id;
+      inputCode = "";
+      document.getElementById("code-screen").textContent = "---";
+
+      for (let i = 1; i <= 8; i++) {
+        const tab = document.getElementById(`tab-${i}`);
+        tab.classList.remove("current");
+        if (i === id) tab.classList.add("current");
+      }
+
+      const m = missions[id];
+      document.getElementById("m-title").innerText = m.title;
+      document.getElementById("m-desc").innerText = m.desc;
+      document.getElementById("m-clue").innerHTML = m.clue;
+
+      selectGroup(currentGroup);
+    }
+
+    function press(val) {
+      playTone(540, 'sine', 0.08);
+      if (unlockedState[activeMission][currentGroup]) return;
+      if (inputCode.length < 7) {
+        inputCode += val;
+        document.getElementById("code-screen").textContent = inputCode;
+      }
+    }
+
+    function del() {
+      playTone(280, 'sine', 0.08);
+      inputCode = "";
+      document.getElementById("code-screen").textContent = "---";
+      document.getElementById("m-feedback").textContent = `Turno de validación: Grupo ${currentGroup}`;
+      document.getElementById("m-feedback").style.color = "var(--text)";
+    }
+
+    function verify() {
+      const m = missions[activeMission];
+      const feedback = document.getElementById("m-feedback");
+
+      if (unlockedState[activeMission][currentGroup]) {
+        feedback.textContent = `ℹ️ El Grupo ${currentGroup} ya tenía este candado abierto.`;
+        feedback.style.color = "var(--warning)";
+        return;
+      }
+
+      if (inputCode === m.code) {
+        playTone(600, 'triangle', 0.15);
+        setTimeout(() => playTone(880, 'triangle', 0.3), 120);
+
+        unlockedState[activeMission][currentGroup] = true;
+        feedback.textContent = `✅ ¡CÓDIGO CORRECTO! El Grupo ${currentGroup} ha abierto su candado.`;
+        feedback.style.color = "var(--success)";
+        inputCode = "";
+        document.getElementById("code-screen").textContent = "ABIERTO";
+
+        updateScoreboardUI();
+
+        // Si todos los grupos han resuelto las 8 misiones, vamos a la entrega de premios
+        let allCompleted = true;
+        for (let mId = 1; mId <= 8; mId++) {
+          for (let gId = 1; gId <= 4; gId++) {
+            if (!unlockedState[mId][gId]) {
+              allCompleted = false;
+              break;
+            }
+          }
+        }
+
+        if (allCompleted) {
+          setTimeout(finishGame, 800);
+        }
+      } else {
+        playTone(180, 'sawtooth', 0.25);
+        feedback.textContent = `❌ CÓDIGO INCORRECTO para el Grupo ${currentGroup}. ¡Revisad la ficha!`;
+        feedback.style.color = "var(--error)";
+        inputCode = "";
+        document.getElementById("code-screen").textContent = "ERROR";
+        setTimeout(() => {
+          if (!unlockedState[activeMission][currentGroup]) {
+            document.getElementById("code-screen").textContent = "---";
+          }
+        }, 1000);
+      }
+    }
+
+    // Pantalla final: Evaluación de resultados y entrega de premios
+    function finishGame() {
+      if (isRunning) toggleTimer();
+      playTone(523, 'triangle', 0.2);
+      setTimeout(() => playTone(659, 'triangle', 0.2), 150);
+      setTimeout(() => playTone(783, 'triangle', 0.3), 300);
+
+      // Calcular puntos por grupo
+      const scores = [
+        { id: 1, name: "Grupo 1 (Azul)", score: 0 },
+        { id: 2, name: "Grupo 2 (Verde)", score: 0 },
+        { id: 3, name: "Grupo 3 (Naranja)", score: 0 },
+        { id: 4, name: "Grupo 4 (Morado)", score: 0 }
+      ];
+
+      for (let g = 1; g <= 4; g++) {
+        let count = 0;
+        for (let m = 1; m <= 8; m++) {
+          if (unlockedState[m][g]) count++;
+        }
+        scores[g - 1].score = count;
+      }
+
+      // Ordenar de mayor a menor puntuación
+      scores.sort((a, b) => b.score - a.score);
+
+      const maxScore = scores[0].score;
+      const winners = scores.filter(s => s.score === maxScore && maxScore > 0);
+
+      // Generar tabla de posiciones
+      const tableBox = document.getElementById("results-table");
+      tableBox.innerHTML = "<div style='font-weight:bold; color:var(--text-muted); text-transform:uppercase; font-size:0.9rem; margin-bottom:4px;'>Clasificación de Misiones Desbloqueadas:</div>";
+
+      scores.forEach((item, index) => {
+        const isWinner = item.score === maxScore && maxScore > 0;
+        const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "🏅";
+        tableBox.innerHTML += `
+          <div class="group-result-row ${isWinner ? 'winner' : ''}">
+            <span>${medal} ${index + 1}.º</span>
+            <span>${item.name}</span>
+            <span>${item.score} / 8 Candados</span>
+            <span style="color: ${isWinner ? '#facc15' : 'var(--text-muted)'};">${isWinner ? '¡Vencedor!' : 'Completado'}</span>
+          </div>
+        `;
+      });
+
+      // Generar el diploma/premio
+      const awardBox = document.getElementById("award-card-box");
+      const subtitle = document.getElementById("podium-subtitle");
+
+      if (maxScore === 8) {
+        subtitle.textContent = "¡MISIÓN PERFECTA! El Bio-Bot 3000 ha sido reconstruido al 100%.";
+      } else {
+        subtitle.textContent = "¡Tiempo cumplido! Reconocimiento al esfuerzo científico del aula.";
+      }
+
+      if (winners.length === 1) {
+        awardBox.innerHTML = `
+          <h3>🏅 GRAN DIPLOMA DE HONOR CIENTÍFICO</h3>
+          <p>Se otorga el <b>Premio a los Maestros de la Biología</b> a:<br>
+          <span style="font-size:1.6rem; color:#facc15; font-weight:bold;">${winners[0].name}</span><br>
+          por haber liderado la reactivación con <b>${maxScore} misiones superadas</b> gracias a su impecable trabajo en equipo, rigor científico y aplicación de la técnica «Lápices al Centro».</p>
+          <p style="margin-top:10px; font-size:1.05rem; color:#94a3b8;">⭐ ¡Y un aplauso de toda la clase a los 4 grupos por su coordinación!</p>
+        `;
+      } else if (winners.length > 1 && maxScore > 0) {
+        const names = winners.map(w => w.name).join(" y ");
+        awardBox.innerHTML = `
+          <h3>🤝 ¡EMPATE EN LA CUMBRE CIENTÍFICA!</h3>
+          <p>Se otorga el <b>Premio de Honor Compartido</b> a:<br>
+          <span style="font-size:1.5rem; color:#facc15; font-weight:bold;">${names}</span><br>
+          igualados con <b>${maxScore} misiones conseguidas</b>. ¡Una demostración insuperable de concentración y cooperación!</p>
+        `;
+      } else {
+        awardBox.innerHTML = `
+          <h3>🔬 MENCIÓN DE ESFUERZO CIENTÍFICO</h3>
+          <p>Los 4 grupos han colaborado con entrega para comprender el cuerpo humano. ¡Continuad investigando para desbloquear los candados restantes!</p>
+        `;
+      }
+
+      document.getElementById("main-console").style.display = "none";
+      document.getElementById("podium-screen").style.display = "flex";
+    }
+
+    // Inicialización del temporizador
+    updateTimerDisplay();
+  </script>
+</body>
+</html>
